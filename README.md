@@ -1,1 +1,1 @@
-# Initial commit for Crud db operations via Spring JPA
+# CRUD db operations via Spring JPA
