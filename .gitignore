@@ -1,0 +1,34 @@
+
+#Eclipse project files and meta-data
+
+*.settings
+*.project
+*.classpath
+*.iml
+*.idea
+*.springBeans
+
+#Maven target directories
+target
+*/target/*
+
+###
+###Common Java exclusions
+###
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+*/EJBServices/db_file.log
+*/EJBServices/db_file.properties
+*/EJBServices/db_file.script
+
