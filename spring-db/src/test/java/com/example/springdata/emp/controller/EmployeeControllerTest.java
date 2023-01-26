@@ -1,7 +1,8 @@
 package com.example.springdata.emp.controller;
 
-import com.example.springdata.emp.model.UserRequest;
-import com.example.springdata.emp.service.UserService;
+import com.example.model.EmpRequest;
+import com.example.persistence.entity.Employee;
+import com.example.springdata.emp.service.EmployeeService;
 import com.example.springdata.emp.util.HashUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -15,14 +16,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
+@WebMvcTest(EmployeeController.class)
+public class EmployeeControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
+    EmployeeService empService;
 
     @MockBean
     HashUtil hashUtil;
@@ -42,19 +43,22 @@ public class UserControllerTest {
     @Test
     @DisplayName("Create User - Valid")
     void createCustomUserValid() throws Exception {
-        UserRequest req = UserRequest.builder()
-                            .defaultRole("Student")
-                            .firstName("Tiensan")
-                            .lastName("Chung")
-                            .loginName("tst_0")
+        EmpRequest req = EmpRequest.builder()
+                            .name("Tim")
+                            .dept("Sales")
+                            .salary(5000)
                             .build();
+        Employee expEmp = Employee.builder()
+                            .name("Tim")
+                            .deptm("Sales")
+                            .salary(5000).build();
         String reqStr = null;
         reqStr = new ObjectMapper().writeValueAsString(req);
 
-        //Mockito.when(courseService.getCourseID(externalCourseId)).thenReturn(Long.valueOf("123"));
-        Mockito.when(userService.createUser(req)).thenReturn(Long.valueOf("123"));
+        Mockito.when(empService.saveEmployee(req)).thenReturn(expEmp);
+        //Mockito.when(empService.createUser(req)).thenReturn(Long.valueOf("123"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/smsuser/custom")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1")
                         .content(reqStr)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
