@@ -4,6 +4,7 @@ import com.example.model.EmpRequest;
 import com.example.persistence.entity.Employee;
 import com.example.springdata.emp.exception.InputValidationException;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public interface EmployeeService {
@@ -11,6 +12,8 @@ public interface EmployeeService {
 	public Employee saveEmployee(EmpRequest req) throws InputValidationException;
 
 	public Optional<Employee> getEmployee(Integer id);
+
+	public String getAllEmployees() throws SQLException;
 
 	public Integer delEmployee(Integer id);
 

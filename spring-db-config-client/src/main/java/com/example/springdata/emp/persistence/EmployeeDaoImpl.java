@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Access;
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.List;
 
 @Component
@@ -16,9 +19,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
+    private DataSource dataSource;
+
+    @Autowired
     public EmployeeDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
 
     @Override
     /* AttributeData is the model for the fields of select query which is coming from
@@ -26,12 +33,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     and not EmployeeRepository, where db operations are built-in or as parameter to
     @Query annotation.
     */
-    public  List<EmpData> getEmps() {
-        String query = "SELECT e.id, e.firstname, e.lastname, d.name FROM emp e, dept d, project p," +
-                        " empproject ep WHERE e.deptid = d.id AND e.id = ep.empid and" +
-                        " p.firstname = ?1";
-        //List<EmpData> empData = jdbcTemplate.query(query, new EmpMapper());
-        //, new Object[]{loginName, productTypeId});
-        return null;
+    public  String getEmps() throws SQLException {
+        System.out.println("Driver name in getEmpls from jdbcTemplate " +jdbcTemplate.getDataSource().getConnection()
+                                        .getMetaData().getDriverName());
+        return "Success";
     }
 }

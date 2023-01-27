@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService empService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/emp", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmpSaveResponse> saveEmployee(@RequestBody EmpRequest request) {
 
         EmpSaveResponse saveResponse = null;
@@ -65,7 +66,7 @@ public class EmployeeController {
         return ret;
     }
 
-    @DeleteMapping("/{empId}")
+    @DeleteMapping("/emp/{empId}")
     public ResponseEntity<EmpDeleteResponse> deleteEmployee(@PathVariable("empId") Integer empId) {
         EmpDeleteResponse delResponse = null;
         Integer delId = null;
@@ -105,8 +106,8 @@ public class EmployeeController {
             throw new InputValidationException("Name cannot be blank.");
     }
 
-    @GetMapping("/{empId}")
-    public ResponseEntity<EmpGetResponse> getEmployee(@PathVariable("empId") Integer empId) throws InputValidationException {
+    @GetMapping("/emp/{empId}")
+    public ResponseEntity<EmpGetResponse> getEmployee(@PathVariable("empId") Integer empId) {
         log.info("Start getEmployee : "+ empId);
         EmpGetResponse getResponse = null;
         ResponseEntity<EmpGetResponse> ret;
@@ -138,5 +139,11 @@ public class EmployeeController {
             ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);
         }
         return ret;
+    }
+
+    @GetMapping("/emps")
+    public String getAllEmployees() throws SQLException {
+        log.info("Start getAllEmployees ");
+        return empService.getAllEmployees();
     }
 }
