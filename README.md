@@ -1,1 +1,1 @@
-# CRUD db operations via Spring JPA
+# Demo of various features of Spring, Spring Cloud
