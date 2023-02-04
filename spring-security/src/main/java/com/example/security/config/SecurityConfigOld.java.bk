@@ -1,0 +1,61 @@
+package com.example.security.config;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+// Setting up custom filter and custom user details service
+@EnableWebSecurity
+@Configuration
+@Slf4j
+public class SecurityConfigOld extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsService customService;
+
+    @Autowired
+    private PasswordEncoder encoder;
+
+    @Autowired
+    private  JwtTokenFilter jwtFilter;
+
+    @Bean //Needed since AuthMgr is not Component/Service
+    public AuthenticationManager getAuthNMgr() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    /* By this, AuthN manager gets to know the custom user service which is to be used instead of the default one.
+    And the manager encodes the pwd in the backgnd, hence needs to know about the encoder.
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        log.info("In configure with AuthenticationManagerBuilder");
+        auth.userDetailsService(customService).passwordEncoder(encoder);
+    }
+
+    // By default this method calls formLogin and Basic HTTP authN.
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        log.info("In configure with HttpSecurity");
+        http.csrf().disable() // disabling csrf since we won't use form login
+                // giving every permission to every request for /login endpoint
+                .authorizeRequests().antMatchers("/login").permitAll()
+                // for everything else, user has to be authenticated
+                .anyRequest().authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //For endpoints other than login
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+}
