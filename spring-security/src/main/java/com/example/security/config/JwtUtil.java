@@ -41,10 +41,12 @@ public class JwtUtil {
     }
 
     public boolean validate(String token) {
-        if (getUsername(token) != null && isValid(token)) {
-            return true;
+        boolean ret = false;
+        if (getUsername(token) != null ) {
+            if (isValid(token))
+                ret = true;
         }
-        return false;
+        return ret;
     }
 
     public String getUsername(String token) {

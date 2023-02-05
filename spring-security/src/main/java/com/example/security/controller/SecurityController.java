@@ -41,7 +41,8 @@ public class SecurityController {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                                                 loginDTO.getUsername(), loginDTO.getPassword());
         log.info("Created token " +token.toString());
-        authManager.authenticate(token);
+        authManager.authenticate(token); // calls UserDetailsService
+        log.info("Token authenticated" );
         // If authN success as impl in UserDetailService, generate token and give it to user.
         String jwtToken = jwtUtil.generateToken(loginDTO.getUsername());
         return new ResponseEntity<>(jwtToken, HttpStatus.OK);

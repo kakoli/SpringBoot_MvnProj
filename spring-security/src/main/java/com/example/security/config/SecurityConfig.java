@@ -47,7 +47,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    /* By this, AuthN provider gets to know the custom user service which is to be used instead of the default one.
+    /* Not used - By this, AuthN provider gets to know the custom user service which is to be used instead of the default one.
     And the manager encodes the pwd in the backgnd, hence needs to know about the encoder.
      */
     @Bean

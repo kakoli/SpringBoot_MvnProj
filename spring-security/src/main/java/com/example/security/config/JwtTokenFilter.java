@@ -1,5 +1,6 @@
 package com.example.security.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,14 +19,17 @@ import java.util.ArrayList;
  * Custom filter will run once per request. We add this to AuthN Filter Chain
  */
 @Component
+@Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
 
     @Override
+    //Called before controller
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
                         throws ServletException, IOException {
+        log.info("In JwtTokenFilter.doFilterInternal");
         String authHdr = request.getHeader("Authorization");
         // For login request, just continue
         if(authHdr == null || authHdr.isEmpty() || !authHdr.startsWith("Bearer")) {
