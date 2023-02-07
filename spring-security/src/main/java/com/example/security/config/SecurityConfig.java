@@ -64,7 +64,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("In securityFilterChain with HttpSecurity");
         //http.userDetailsService(customService);
-        http.csrf().disable() // disabling csrf since we won't use form login
+        http.csrf().disable() // disabling csrf since we won't use the default form login.
                 // giving every permission to every request for /login endpoint
                 .authorizeRequests().antMatchers("/**/login/**").permitAll()
                 // for everything else, user has to be authenticated

@@ -15,12 +15,14 @@ import java.util.Map;
 
 @Service
 @Slf4j
+// InMemoryUserDetailsManager
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private BCryptPasswordEncoder pwdEncoder;
 
     @Override
+    // Initialising list of users shoule be separate from checking user from current request code.
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         Map<String, String> users = new HashMap<>();
         log.info("In loadUserByUsername");
