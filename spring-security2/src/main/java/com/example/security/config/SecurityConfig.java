@@ -52,20 +52,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    //Will build a DefaultSecurityFilterChain object to load request matchers and filters.
+    //Will override the SpringBootWebSecurityConfiguration.defaultSecurityFilterChain object to load request matchers and filters.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("In securityFilterChain with HttpSecurity");
         //http.userDetailsService(customService);
         http.csrf().disable() // disabling csrf since we won't use the default form login.
                 // giving every permission to every request for /login endpoint
-                .authorizeRequests().antMatchers("/**/login/**").permitAll()
+                .authorizeRequests().antMatchers("/**/jwt/**").permitAll()
                 // for everything else, user has to be authenticated
                 .anyRequest().authenticated()
                 .and()
                 //decision creation policy
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        //For endpoints other than login
+        //For endpoints other than login, add jwtFilter before UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -74,8 +74,9 @@ public class SecurityConfig {
     /* Not used - By this, AuthN provider gets to know the custom user service which is to be used instead of the default one.
     And the manager encodes the pwd in the backgnd, hence needs to know about the encoder.
      */
-    @Bean
+    //@Bean
     public AuthenticationProvider authenticationProvider() {
+        log.info("In authenticationProvider");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(inMemUserService);
         authProvider.setPasswordEncoder(encoder);

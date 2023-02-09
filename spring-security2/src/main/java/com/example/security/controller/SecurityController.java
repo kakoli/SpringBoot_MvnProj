@@ -20,24 +20,16 @@ public class SecurityController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> sayHello() {;
-        log.info("In hello");
-        return new ResponseEntity<>("Hello from security", HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
-    /*
-    {"sub": "test",
+    @PostMapping("/auth/jwt")
+    /* {"sub": "test",
 	"iss": "kakoli.sample",
 	"iat": 1675319135,
 	"exp": 1675319435
-    }
-     */
+    }*/
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         /* Creating token object from (user,pwd)to send it to authentication manager.
          AuthN manager encodes the pwd in the backgnd, hence needs to know about the encoder.
-         Hence, encoder is injected into SecurityConfig*/
+         Hence, encoder is injected into SecurityConfig.authenticationManager. */
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                                                 loginDTO.getUsername(), loginDTO.getPassword());
         log.info("Created token " +token.toString());
@@ -46,6 +38,12 @@ public class SecurityController {
         // If authN success as impl in UserDetailService, generate token and give it to user.
         String jwtToken = jwtUtil.generateToken(loginDTO.getUsername());
         return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+    }
+
+    @GetMapping("/auth/hello")
+    public ResponseEntity<String> sayHello() {;
+        log.info("In hello");
+        return new ResponseEntity<>("Hello from security with JWT token", HttpStatus.OK);
     }
 }
 
