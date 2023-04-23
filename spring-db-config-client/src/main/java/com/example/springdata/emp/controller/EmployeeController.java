@@ -2,7 +2,7 @@ package com.example.springdata.emp.controller;
 
 import com.example.model.*;
 import com.example.model.Error;
-import com.example.persistence.entity.Employee;
+import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.exception.InputValidationException;
 import com.example.springdata.emp.exception.NotFoundException;
 import com.example.springdata.emp.service.EmployeeService;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,7 +31,7 @@ public class EmployeeController {
 
         EmpSaveResponse saveResponse = null;
         ResponseEntity<EmpSaveResponse> ret = null;
-        Employee entity = null;
+        EmployeeSimple entity = null;
 
         System.out.println("In controller save " +request.getName());
         validate(request);
@@ -76,7 +75,7 @@ public class EmployeeController {
             log.error("Emp id is mandatory");
             Error err = Error.builder()
                     .errorCode(HttpStatus.BAD_REQUEST.value())
-                    .errorDesc("Employee id needed in request.").build();
+                    .errorDesc("EmployeeSimple id needed in request.").build();
             delResponse = EmpDeleteResponse.builder()
                     .errList(Collections.singletonList(err)).build();
             ret = new ResponseEntity<>(delResponse, HttpStatus.BAD_REQUEST);
@@ -111,7 +110,7 @@ public class EmployeeController {
         log.info("Start getEmployee : "+ empId);
         EmpGetResponse getResponse = null;
         ResponseEntity<EmpGetResponse> ret;
-        Optional<Employee> emp = null;
+        Optional<EmployeeSimple> emp = null;
 
         if(empId != null ) {
             emp = empService.getEmployee(empId);
@@ -123,7 +122,7 @@ public class EmployeeController {
             else {
                 Error err = Error.builder()
                         .errorCode(HttpStatus.NOT_FOUND.value())
-                        .errorDesc("Employee does not exist.").build();
+                        .errorDesc("EmployeeSimple does not exist.").build();
                 getResponse = EmpGetResponse.builder()
                         .errList(Collections.singletonList(err)).build();
                 ret = new ResponseEntity<>(getResponse, HttpStatus.NOT_FOUND);
@@ -133,7 +132,7 @@ public class EmployeeController {
             log.error("Emp id is mandatory");
             Error err = Error.builder()
                     .errorCode(HttpStatus.BAD_REQUEST.value())
-                    .errorDesc("Employee id needed in request.").build();
+                    .errorDesc("EmployeeSimple id needed in request.").build();
             getResponse = EmpGetResponse.builder()
                     .errList(Collections.singletonList(err)).build();
             ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);

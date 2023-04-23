@@ -1,8 +1,7 @@
 package com.example.springdata.emp.service;
 
-import com.example.model.EmpData;
 import com.example.model.EmpRequest;
-import com.example.persistence.entity.Employee;
+import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.exception.NotFoundException;
 import com.example.springdata.emp.persistence.EmployeeDao;
 import com.example.springdata.emp.persistence.EmployeeRepository;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -28,18 +26,18 @@ public class EmpServiceImpl_Mysql implements EmployeeService {
 	@Autowired
 	private DataSource dataSource;
 
-	public Employee saveEmployee(EmpRequest req) {
-		Employee emp = Employee.builder()
+	public EmployeeSimple saveEmployee(EmpRequest req) {
+		EmployeeSimple emp = EmployeeSimple.builder()
 				.name(req.getName())
 				.deptm(req.getDept())
 				.salary(req.getSalary()).build();
-		Employee savedEntity = empRepo.save(emp);
+		EmployeeSimple savedEntity = empRepo.save(emp);
 		log.info("Saved emp with id " +savedEntity.getEmpId());
 		return savedEntity;
 	}
 
-	public Optional<Employee> getEmployee(Integer id) {
-		Optional<Employee> emp = null;
+	public Optional<EmployeeSimple> getEmployee(Integer id) {
+		Optional<EmployeeSimple> emp = null;
 		try {
 			System.out.println("Driver name in getEmployee " +dataSource.getConnection().getMetaData().getDriverName());
 			emp = empRepo.findById(id);
@@ -57,7 +55,7 @@ public class EmpServiceImpl_Mysql implements EmployeeService {
 
 	public Integer delEmployee(Integer id){
 		if(!empRepo.existsById(id))
-			throw new NotFoundException("Employee does not exist.");
+			throw new NotFoundException("EmployeeSimple does not exist.");
 		empRepo.deleteById(id);
 		return id;
 	}

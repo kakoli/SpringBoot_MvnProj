@@ -1,7 +1,7 @@
 package com.example.springdata.emp.controller;
 
 import com.example.model.EmpRequest;
-import com.example.persistence.entity.Employee;
+import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.service.EmployeeService;
 import com.example.springdata.emp.util.HashUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +48,7 @@ public class EmployeeControllerTest {
                             .dept("Sales")
                             .salary(5000)
                             .build();
-        Employee expEmp = Employee.builder()
+        EmployeeSimple expEmp = EmployeeSimple.builder()
                             .name("Tim")
                             .deptm("Sales")
                             .salary(5000).build();

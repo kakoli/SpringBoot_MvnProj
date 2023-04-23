@@ -1,16 +1,12 @@
 package com.example.springdata.emp.persistence;
 
-import com.example.model.EmpData;
-import com.example.persistence.entity.Employee;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Access;
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.List;
 
 @Component
 @Slf4j

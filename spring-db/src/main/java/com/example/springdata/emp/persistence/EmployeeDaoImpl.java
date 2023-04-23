@@ -1,7 +1,6 @@
 package com.example.springdata.emp.persistence;
 
 import com.example.model.EmpData;
-import com.example.persistence.entity.Employee;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,8 +21,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     /* AttributeData is the model for the fields of select query which is coming from
-    multiple tables other than 'user'. Hence this is part of Dao and jdbcTemplate
-    and not EmployeeRepository, where db operations are built-in or as parameter to
+    multiple tables other than 'emp'. Hence this is part of Dao and jdbcTemplate
+    and not EmployeeSimpleRepository, where db operations are built-in or as parameter to
     @Query annotation.
     */
     public  List<EmpData> getEmps() {
