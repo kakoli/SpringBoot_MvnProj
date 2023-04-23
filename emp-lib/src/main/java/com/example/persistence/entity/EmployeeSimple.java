@@ -8,41 +8,35 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name="EMP")
-public class Employee {
+@Table(name="EMP_SIMPLE")
+public class EmployeeSimple {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
-    @JsonIgnore
+    @JsonIgnore //Not included in input/output json
     private Integer empId;
 
-    @JsonProperty("firstname")
-    private String firstname;
-
-    @JsonProperty("lastname")
-    private String lastname;
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("salary")
     private Integer salary;
 
-    @JsonProperty("joindate")
-    private Date joindate; //should be db col name if @Column not present
+    @Column(name="dept")
+    @JsonProperty("department")
+    private String deptm; //should be db col name if @Column not present
 
-    @OneToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
-    private Address address;
-
-    public Integer getEmpId() {
+    /*public Integer getEmpId() {
         return empId;
     }
 
     public void setEmpId(Integer empId) {
         this.empId = empId;
-    }
+    }*/
 }

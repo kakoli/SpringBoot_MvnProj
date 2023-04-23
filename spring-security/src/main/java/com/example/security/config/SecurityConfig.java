@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @EnableWebSecurity
 @Configuration
@@ -25,17 +26,23 @@ public class SecurityConfig {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private BasicAuthenticationEntryPoint authEntryPoint;
+
     @Bean
     //Will build a DefaultSecurityFilterChain object to load request matchers and filters.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("In securityFilterChain with HttpSecurity");
         //http.userDetailsService(customService);
         http
-                .csrf().disable()
+                .csrf().disable() // disabling csrf since we won't use the default form login.
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();//Customizer.withDefaults());
+                // Calls BasicAuthenticationFilter
+                .httpBasic()//Customizer.withDefaults())
+                // this is called only on Auth type 'None'
+                .authenticationEntryPoint(authEntryPoint);
         return http.build();
     }
 

@@ -1,6 +1,5 @@
 package com.example.model;
 
-import com.example.persistence.entity.Employee;
 import lombok.Builder;
 import lombok.Getter;
 

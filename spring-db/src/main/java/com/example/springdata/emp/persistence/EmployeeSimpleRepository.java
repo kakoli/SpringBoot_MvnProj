@@ -1,19 +1,18 @@
 package com.example.springdata.emp.persistence;
 
-import com.example.persistence.entity.Employee;
+import com.example.persistence.entity.EmployeeSimple;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository extends JpaRepository<EmployeeSimple, Integer> {
 
     //@Query(value = "select name from emp_gradle where name = ?1", nativeQuery = true)
-    @Query("SELECT emp FROM Employee emp WHERE emp.name = ?1")
-    public Optional<Employee> findEmpByName(String name);
+    @Query("SELECT emp FROM EmployeeSimple emp WHERE emp.name = ?1")
+    public Optional<EmployeeSimple> findEmpByName(String name);
 
     /*@Query(value = "", nativeQuery = true)
     public List<EmpData> getDeptProj(String empName);
