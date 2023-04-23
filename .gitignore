@@ -32,3 +32,4 @@ hs_err_pid*
 */EJBServices/db_file.properties
 */EJBServices/db_file.script
 
+.DS_Store
