@@ -4,7 +4,6 @@ import com.example.model.*;
 import com.example.model.Error;
 import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.exception.InputValidationException;
-import com.example.springdata.emp.exception.NotFoundException;
 import com.example.springdata.emp.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,13 +25,13 @@ public class EmployeeController {
     private EmployeeService empService;
 
     @PostMapping(path = "/emp", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmpSaveResponse> saveEmployee(@RequestBody EmpRequest request) {
-
+    public ResponseEntity<EmpSaveResponse> saveEmployee(@RequestBody EmpSimpleRequest request) {
         EmpSaveResponse saveResponse = null;
         ResponseEntity<EmpSaveResponse> ret = null;
         EmployeeSimple entity = null;
 
-        System.out.println("In controller save " +request.getName());
+        log.info(log.getClass().getName());
+        log.info("In controller save " +request.getName());
         validate(request);
         try {
             entity = empService.saveEmployee(request);
@@ -65,42 +63,7 @@ public class EmployeeController {
         return ret;
     }
 
-    @DeleteMapping("/emp/{empId}")
-    public ResponseEntity<EmpDeleteResponse> deleteEmployee(@PathVariable("empId") Integer empId) {
-        EmpDeleteResponse delResponse = null;
-        Integer delId = null;
-        ResponseEntity<EmpDeleteResponse> ret = null;
-
-        if(empId == null) {
-            log.error("Emp id is mandatory");
-            Error err = Error.builder()
-                    .errorCode(HttpStatus.BAD_REQUEST.value())
-                    .errorDesc("EmployeeSimple id needed in request.").build();
-            delResponse = EmpDeleteResponse.builder()
-                    .errList(Collections.singletonList(err)).build();
-            ret = new ResponseEntity<>(delResponse, HttpStatus.BAD_REQUEST);
-        }
-        try {
-            delId = empService.delEmployee(empId);
-            delResponse = EmpDeleteResponse.builder()
-                    .id(delId).build();
-            ret = new ResponseEntity<>(delResponse, HttpStatus.OK);
-        }
-        catch (NotFoundException e) {
-            log.error("Emp id not found");
-            e.printStackTrace();
-            Error err = Error.builder()
-                    .errorCode(HttpStatus.NOT_FOUND.value())
-                    .errorDesc(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()).build();
-            delResponse = EmpDeleteResponse.builder()
-                    .errList(Collections.singletonList(err))
-                    .build();
-            ret = new ResponseEntity<>(delResponse, HttpStatus.NOT_FOUND);
-        }
-        return ret;
-    }
-
-    private void validate(EmpRequest request) throws InputValidationException {
+    private void validate(EmpSimpleRequest request) throws InputValidationException {
         if(StringUtils.isBlank(request.getName()))
             throw new InputValidationException("Name cannot be blank.");
     }
@@ -138,11 +101,5 @@ public class EmployeeController {
             ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);
         }
         return ret;
-    }
-
-    @GetMapping("/emps")
-    public List<EmpData> getAllEmployees() {
-        log.info("Start getAllEmployees ");
-        return empService.getAllEmployees();
     }
 }

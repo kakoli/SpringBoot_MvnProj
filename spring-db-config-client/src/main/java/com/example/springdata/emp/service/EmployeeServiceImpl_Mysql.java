@@ -1,6 +1,6 @@
 package com.example.springdata.emp.service;
 
-import com.example.model.EmpRequest;
+import com.example.model.EmpSimpleRequest;
 import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.exception.NotFoundException;
 import com.example.springdata.emp.persistence.EmployeeDao;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class EmpServiceImpl_Mysql implements EmployeeService {
+public class EmployeeServiceImpl_Mysql implements EmployeeService {
 	
 	@Autowired
 	private EmployeeRepository empRepo;
@@ -26,7 +26,7 @@ public class EmpServiceImpl_Mysql implements EmployeeService {
 	@Autowired
 	private DataSource dataSource;
 
-	public EmployeeSimple saveEmployee(EmpRequest req) {
+	public EmployeeSimple saveEmployee(EmpSimpleRequest req) {
 		EmployeeSimple emp = EmployeeSimple.builder()
 				.name(req.getName())
 				.deptm(req.getDept())
@@ -38,18 +38,16 @@ public class EmpServiceImpl_Mysql implements EmployeeService {
 
 	public Optional<EmployeeSimple> getEmployee(Integer id) {
 		Optional<EmployeeSimple> emp = null;
-		try {
-			System.out.println("Driver name in getEmployee " +dataSource.getConnection().getMetaData().getDriverName());
-			emp = empRepo.findById(id);
-		}
-		catch (SQLException ex) {
-
-		}
+		emp = empRepo.findById(id);
 		return  emp;
 	}
 
 	@Override
 	public String getAllEmployees() throws SQLException {
+		System.out.println("Datasource in Springboot " +dataSource.getClass().getName()); //com.zaxxer.hikari.HikariDataSource
+
+		// Driver name - MySQL Connector/J
+		System.out.println("Driver name in getAllEmployees " +dataSource.getConnection().getMetaData().getDriverName());
 		return empDao.getEmps();
 	}
 

@@ -30,8 +30,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Query annotation.
     */
     public  String getEmps() throws SQLException {
-        System.out.println("Driver name in getEmpls from jdbcTemplate " +jdbcTemplate.getDataSource().getConnection()
-                                        .getMetaData().getDriverName());
         return "Success";
     }
 }

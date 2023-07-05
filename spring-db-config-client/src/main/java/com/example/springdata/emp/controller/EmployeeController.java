@@ -27,17 +27,17 @@ public class EmployeeController {
     private EmployeeService empService;
 
     @PostMapping(path = "/emp", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmpSaveResponse> saveEmployee(@RequestBody EmpRequest request) {
+    public ResponseEntity<EmpSimpleSaveResponse> saveEmployee(@RequestBody EmpSimpleRequest request) {
 
-        EmpSaveResponse saveResponse = null;
-        ResponseEntity<EmpSaveResponse> ret = null;
+        EmpSimpleSaveResponse saveResponse = null;
+        ResponseEntity<EmpSimpleSaveResponse> ret = null;
         EmployeeSimple entity = null;
 
-        System.out.println("In controller save " +request.getName());
+        log.info(log.getClass().getName());
         validate(request);
         try {
             entity = empService.saveEmployee(request);
-            saveResponse = EmpSaveResponse.builder().emp(entity).build();
+            saveResponse = EmpSimpleSaveResponse.builder().emp(entity).build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.OK);
         }
         catch (RuntimeException e) {
@@ -46,7 +46,7 @@ public class EmployeeController {
             Error err = Error.builder()
                     .errorCode(HttpStatus.BAD_REQUEST.value())
                     .errorDesc(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()).build();
-            saveResponse = EmpSaveResponse.builder()
+            saveResponse = EmpSimpleSaveResponse.builder()
                     .errList(Collections.singletonList(err))
                     .build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.BAD_REQUEST);
@@ -57,7 +57,7 @@ public class EmployeeController {
             Error err = Error.builder()
                     .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .errorDesc(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()).build();
-            saveResponse = EmpSaveResponse.builder()
+            saveResponse = EmpSimpleSaveResponse.builder()
                     .errList(Collections.singletonList(err))
                     .build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,23 +66,23 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/emp/{empId}")
-    public ResponseEntity<EmpDeleteResponse> deleteEmployee(@PathVariable("empId") Integer empId) {
-        EmpDeleteResponse delResponse = null;
+    public ResponseEntity<EmpSimpleDeleteResponse> deleteEmployee(@PathVariable("empId") Integer empId) {
+        EmpSimpleDeleteResponse delResponse = null;
         Integer delId = null;
-        ResponseEntity<EmpDeleteResponse> ret = null;
+        ResponseEntity<EmpSimpleDeleteResponse> ret = null;
 
         if(empId == null) {
             log.error("Emp id is mandatory");
             Error err = Error.builder()
                     .errorCode(HttpStatus.BAD_REQUEST.value())
                     .errorDesc("EmployeeSimple id needed in request.").build();
-            delResponse = EmpDeleteResponse.builder()
+            delResponse = EmpSimpleDeleteResponse.builder()
                     .errList(Collections.singletonList(err)).build();
             ret = new ResponseEntity<>(delResponse, HttpStatus.BAD_REQUEST);
         }
         try {
             delId = empService.delEmployee(empId);
-            delResponse = EmpDeleteResponse.builder()
+            delResponse = EmpSimpleDeleteResponse.builder()
                     .id(delId).build();
             ret = new ResponseEntity<>(delResponse, HttpStatus.OK);
         }
@@ -92,7 +92,7 @@ public class EmployeeController {
             Error err = Error.builder()
                     .errorCode(HttpStatus.NOT_FOUND.value())
                     .errorDesc(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()).build();
-            delResponse = EmpDeleteResponse.builder()
+            delResponse = EmpSimpleDeleteResponse.builder()
                     .errList(Collections.singletonList(err))
                     .build();
             ret = new ResponseEntity<>(delResponse, HttpStatus.NOT_FOUND);
@@ -100,22 +100,22 @@ public class EmployeeController {
         return ret;
     }
 
-    private void validate(EmpRequest request) throws InputValidationException {
+    private void validate(EmpSimpleRequest request) throws InputValidationException {
         if(StringUtils.isBlank(request.getName()))
             throw new InputValidationException("Name cannot be blank.");
     }
 
     @GetMapping("/emp/{empId}")
-    public ResponseEntity<EmpGetResponse> getEmployee(@PathVariable("empId") Integer empId) {
+    public ResponseEntity<EmpSimpleGetResponse> getEmployee(@PathVariable("empId") Integer empId) {
         log.info("Start getEmployee : "+ empId);
-        EmpGetResponse getResponse = null;
-        ResponseEntity<EmpGetResponse> ret;
+        EmpSimpleGetResponse getResponse = null;
+        ResponseEntity<EmpSimpleGetResponse> ret;
         Optional<EmployeeSimple> emp = null;
 
         if(empId != null ) {
             emp = empService.getEmployee(empId);
             if (!emp.isEmpty()) {
-                getResponse = EmpGetResponse.builder()
+                getResponse = EmpSimpleGetResponse.builder()
                         .emp(emp.get()).build();
                 ret = new ResponseEntity<>(getResponse, HttpStatus.OK);
             }
@@ -123,7 +123,7 @@ public class EmployeeController {
                 Error err = Error.builder()
                         .errorCode(HttpStatus.NOT_FOUND.value())
                         .errorDesc("EmployeeSimple does not exist.").build();
-                getResponse = EmpGetResponse.builder()
+                getResponse = EmpSimpleGetResponse.builder()
                         .errList(Collections.singletonList(err)).build();
                 ret = new ResponseEntity<>(getResponse, HttpStatus.NOT_FOUND);
             }
@@ -133,7 +133,7 @@ public class EmployeeController {
             Error err = Error.builder()
                     .errorCode(HttpStatus.BAD_REQUEST.value())
                     .errorDesc("EmployeeSimple id needed in request.").build();
-            getResponse = EmpGetResponse.builder()
+            getResponse = EmpSimpleGetResponse.builder()
                     .errList(Collections.singletonList(err)).build();
             ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);
         }

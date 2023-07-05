@@ -1,18 +1,16 @@
 package com.example.springdata.emp.controller.emp.controller;
 
-import com.example.model.EmpRequest;
-import com.example.model.EmpResponse;
-import com.example.model.EmpSaveResponse;
+import com.example.model.EmpSimpleRequest;
+import com.example.model.BaseResponse;
+import com.example.model.EmpSimpleSaveResponse;
 import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.controller.EmployeeController;
 import com.example.springdata.emp.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,7 +25,7 @@ public class EmployeeControllerTest {
     EmployeeService mockService;
 
     @MockBean
-    EmpResponse mockResponse;
+    BaseResponse mockResponse;
 
     @Autowired
     MockMvc mockMvc;
@@ -38,9 +36,9 @@ public class EmployeeControllerTest {
         String dept = "test_dept";
         int sal = 3333;
         int id = 123;
-        EmpRequest testReq = EmpRequest.builder().name(name).dept(dept).salary(sal).build();
+        EmpSimpleRequest testReq = EmpSimpleRequest.builder().name(name).dept(dept).salary(sal).build();
         EmployeeSimple empEntity = EmployeeSimple.builder().empId(id).name(name).deptm(dept).salary(sal).build();
-        EmpSaveResponse response = EmpSaveResponse.builder().emp(empEntity).errList(null).build();
+        EmpSimpleSaveResponse response = EmpSimpleSaveResponse.builder().emp(empEntity).errList(null).build();
 
         // Mockito calls
         Mockito.when(mockService.saveEmployee(testReq)).thenReturn(empEntity);

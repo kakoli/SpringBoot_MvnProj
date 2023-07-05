@@ -1,7 +1,7 @@
 package com.example.springdata.emp.service;
 
 import com.example.model.EmpData;
-import com.example.model.EmpRequest;
+import com.example.model.EmpSimpleRequest;
 import com.example.persistence.entity.EmployeeSimple;
 import com.example.springdata.emp.exception.InputValidationException;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EmployeeService {
 	
-	public EmployeeSimple saveEmployee(EmpRequest req) throws InputValidationException;
+	public EmployeeSimple saveEmployee(EmpSimpleRequest req) throws InputValidationException;
 
 	public Optional<EmployeeSimple> getEmployee(Integer id);
 
