@@ -13,9 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EmpRequest {
+public class EmpSimpleRequest {
     private String name;
     private String dept;
     private Integer salary;
-
 }

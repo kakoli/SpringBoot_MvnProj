@@ -5,7 +5,7 @@ import com.example.model.EmpData;
 
 import java.util.List;
 
-public interface EmployeeDao {
+public interface EmpDao {
 
-    public List<EmpData> getEmps();
+    public List<EmpData> getAllEmps();
 }

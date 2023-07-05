@@ -1,4 +1,4 @@
-package com.example.springdata.emp.util;
+package com.example.springdata.dept.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

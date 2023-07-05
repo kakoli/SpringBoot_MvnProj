@@ -34,12 +34,4 @@ public class Address {
 
     @JsonProperty("zip")
     private Integer zip;
-
-    public Integer getAddrId() {
-        return addrId;
-    }
-
-    public void setAddrId(Integer id) {
-        this.addrId = id;
-    }
 }

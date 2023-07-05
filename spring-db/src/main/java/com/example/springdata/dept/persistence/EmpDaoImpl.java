@@ -10,12 +10,12 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class EmployeeDaoImpl implements EmployeeDao {
+public class EmpDaoImpl implements EmpDao {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public EmployeeDaoImpl(JdbcTemplate jdbcTemplate) {
+    public EmpDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -25,10 +25,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
     and not EmployeeSimpleRepository, where db operations are built-in or as parameter to
     @Query annotation.
     */
-    public  List<EmpData> getEmps() {
-        String query = "SELECT e.id, e.firstname, e.lastname, d.name FROM emp e, dept d, project p," +
-                        " empproject ep WHERE e.deptid = d.id AND e.id = ep.empid and" +
-                        " p.firstname = ?1";
+    public  List<EmpData> getAllEmps() {
+        String query = "SELECT e.firstname, e.lastname, e.joindate FROM emp e, address a WHERE \n" +
+                        "e.addr_id = a.id";
         //List<EmpData> empData = jdbcTemplate.query(query, new EmpMapper());
         //, new Object[]{loginName, productTypeId});
         return null;

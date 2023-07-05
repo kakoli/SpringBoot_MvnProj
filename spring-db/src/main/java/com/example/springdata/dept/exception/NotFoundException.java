@@ -1,4 +1,4 @@
-package com.example.springdata.emp.exception;
+package com.example.springdata.dept.exception;
 
 public class NotFoundException extends RuntimeException {
 

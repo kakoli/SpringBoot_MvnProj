@@ -1,4 +1,4 @@
-package com.example.springdata.emp.persistence;
+package com.example.springdata.dept.persistence;
 
 import com.example.model.EmpData;
 import org.springframework.jdbc.core.RowMapper;

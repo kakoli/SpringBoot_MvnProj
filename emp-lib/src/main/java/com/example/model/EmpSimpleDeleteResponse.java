@@ -6,11 +6,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class EmpDeleteResponse extends EmpResponse {
+public class EmpSimpleDeleteResponse extends BaseResponse {
     private Integer deletedId;
 
     @Builder
-    public EmpDeleteResponse(List<Error> errList, Integer id) {
+    public EmpSimpleDeleteResponse(List<Error> errList, Integer id) {
         super(errList);
         this.deletedId = id;
     }

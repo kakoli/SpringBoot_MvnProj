@@ -40,7 +40,9 @@ public class JwtUtil {
     }
 
     public String getUsername(String token) {
-        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody();
+        //Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 
@@ -48,7 +50,8 @@ public class JwtUtil {
         Claims claims ;
         boolean valid = false;
         try {
-            claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+            claims = Jwts.parserBuilder().setSigningKey(key).build()
+                    .parseClaimsJws(token).getBody();
             valid = claims.getExpiration().after(new Date(System.currentTimeMillis()));
         }
         catch(Exception e) {

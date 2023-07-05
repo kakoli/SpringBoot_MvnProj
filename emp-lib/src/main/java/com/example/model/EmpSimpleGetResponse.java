@@ -7,11 +7,11 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class EmpGetResponse extends EmpResponse {
+public class EmpSimpleGetResponse extends BaseResponse {
     private EmployeeSimple emp;
 
     @Builder
-    public EmpGetResponse(List<Error> errList, EmployeeSimple emp) {
+    public EmpSimpleGetResponse(List<Error> errList, EmployeeSimple emp) {
         super(errList);
         this.emp = emp;
     }

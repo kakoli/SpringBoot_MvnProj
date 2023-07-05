@@ -6,14 +6,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EmpData {
-    private String name;
-    private String dept;
-    private Integer salary;
-
+    private String firstname;
+    private String lastname;
+    private String deptname;
+    private Date joindate;
+    private String city;
+    private Integer zip;
 }

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -30,7 +32,18 @@ public class Department {
     @Column(name="size")
     private Integer size;
 
-    @Column(name="zip")
-    private Integer zip;
+    //One To Many Unidirectional mapping
+    @OneToMany( cascade = CascadeType.ALL, fetch= FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name="dept_id")
+    List<Employee> emps = new ArrayList<>();
 
+    /*public void addEmp(Employee e) {
+        emps.add(e);
+        e.setDept(this);
+
+    }
+    public void removeEmp(Employee e) {
+        emps.remove(e);
+        e.setDept(null);
+    }*/
 }

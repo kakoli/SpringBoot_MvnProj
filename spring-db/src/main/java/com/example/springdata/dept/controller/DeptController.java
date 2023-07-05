@@ -1,10 +1,12 @@
-package com.example.springdata.emp.controller;
+package com.example.springdata.dept.controller;
 
 import com.example.model.*;
 import com.example.model.Error;
-import com.example.persistence.entity.EmployeeSimple;
-import com.example.springdata.emp.exception.InputValidationException;
-import com.example.springdata.emp.service.EmployeeService;
+import com.example.persistence.entity.Department;
+import com.example.persistence.entity.Employee;
+import com.example.springdata.dept.service.DeptService;
+import com.example.springdata.dept.exception.InputValidationException;
+import com.example.springdata.dept.service.EmpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +21,40 @@ import java.util.Optional;
 @RestController
 @Slf4j
 @RequestMapping("/api/v2")
-public class EmployeeController {
+public class DeptController {
 
     @Autowired
-    private EmployeeService empService;
+    private DeptService deptService;
+
+    @Autowired
+    private EmpService empService;
 
     @PostMapping(path = "/emp", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmpSaveResponse> saveEmployee(@RequestBody EmpSimpleRequest request) {
-        EmpSaveResponse saveResponse = null;
-        ResponseEntity<EmpSaveResponse> ret = null;
-        EmployeeSimple entity = null;
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee request) {
+        ResponseEntity<Employee> ret = null;
+        Employee entity = null;
 
-        log.info(log.getClass().getName());
-        log.info("In controller save " +request.getName());
-        validate(request);
+        //log.info("In controller save emp request " + request);
         try {
             entity = empService.saveEmployee(request);
-            saveResponse = EmpSaveResponse.builder().emp(entity).build();
+            ret = new ResponseEntity<>(entity, HttpStatus.OK);
+        } catch (InputValidationException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
+    @PostMapping(path = "/dept", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeptSaveResponse> saveDepartment(@RequestBody Department request) {
+        log.info("Start  saveDepartment in controller " +request);
+        DeptSaveResponse saveResponse = null;
+        ResponseEntity<DeptSaveResponse> ret = null;
+        Department entity = null;
+
+        validate(request);
+        try {
+            entity = deptService.saveDepartment(request);
+            saveResponse = DeptSaveResponse.builder().dept(entity).build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.OK);
         }
         catch (RuntimeException e) {
@@ -44,18 +63,18 @@ public class EmployeeController {
             Error err = Error.builder()
                     .errorCode(HttpStatus.BAD_REQUEST.value())
                     .errorDesc(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()).build();
-            saveResponse = EmpSaveResponse.builder()
+            saveResponse = DeptSaveResponse.builder()
                     .errList(Collections.singletonList(err))
                     .build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.BAD_REQUEST);
         }
         catch (Exception e) {
-            log.error("Unexpected Exception in create user ");
+            log.error("Unexpected Exception in saving department ");
             e.printStackTrace();
             Error err = Error.builder()
                     .errorCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                     .errorDesc(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()).build();
-            saveResponse = EmpSaveResponse.builder()
+            saveResponse = DeptSaveResponse.builder()
                     .errList(Collections.singletonList(err))
                     .build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,43 +82,8 @@ public class EmployeeController {
         return ret;
     }
 
-    private void validate(EmpSimpleRequest request) throws InputValidationException {
+    private void validate(Department request) throws InputValidationException {
         if(StringUtils.isBlank(request.getName()))
             throw new InputValidationException("Name cannot be blank.");
-    }
-
-    @GetMapping("/emp/{empId}")
-    public ResponseEntity<EmpGetResponse> getEmployee(@PathVariable("empId") Integer empId) throws InputValidationException {
-        log.info("Start getEmployee : "+ empId);
-        EmpGetResponse getResponse = null;
-        ResponseEntity<EmpGetResponse> ret;
-        Optional<EmployeeSimple> emp = null;
-
-        if(empId != null ) {
-            emp = empService.getEmployee(empId);
-            if (!emp.isEmpty()) {
-                getResponse = EmpGetResponse.builder()
-                        .emp(emp.get()).build();
-                ret = new ResponseEntity<>(getResponse, HttpStatus.OK);
-            }
-            else {
-                Error err = Error.builder()
-                        .errorCode(HttpStatus.NOT_FOUND.value())
-                        .errorDesc("EmployeeSimple does not exist.").build();
-                getResponse = EmpGetResponse.builder()
-                        .errList(Collections.singletonList(err)).build();
-                ret = new ResponseEntity<>(getResponse, HttpStatus.NOT_FOUND);
-            }
-        }
-        else {
-            log.error("Emp id is mandatory");
-            Error err = Error.builder()
-                    .errorCode(HttpStatus.BAD_REQUEST.value())
-                    .errorDesc("EmployeeSimple id needed in request.").build();
-            getResponse = EmpGetResponse.builder()
-                    .errList(Collections.singletonList(err)).build();
-            ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);
-        }
-        return ret;
     }
 }

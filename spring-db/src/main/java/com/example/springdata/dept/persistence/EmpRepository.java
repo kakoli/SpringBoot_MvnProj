@@ -1,7 +1,6 @@
 package com.example.springdata.dept.persistence;
 
 import com.example.model.EmpData;
-import com.example.persistence.entity.Department;
 import com.example.persistence.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
