@@ -1,6 +1,5 @@
 package com.example.springdata.dept.service;
 
-import com.example.model.EmpData;
 import com.example.persistence.entity.Employee;
 import com.example.springdata.dept.persistence.EmpDao;
 import com.example.springdata.dept.persistence.EmpRepository;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -24,13 +22,6 @@ public class EmpServiceImpl implements EmpService {
 
     @Transactional
     public Employee saveEmployee(Employee req) {
-        /*Employee emp = Employee.builder()
-                        .firstname(req.getFirstname())
-                        .lastname(req.getLastname())
-                        .salary(req.getSalary())
-                        .joindate(req.getJoindate())
-                        .address(req.getAddress())
-                        .build();*/
         log.info("In service: " + req.getJoindate());
         Employee savedEntity = null;
         savedEntity = empRepo.save(req);
@@ -44,7 +35,10 @@ public class EmpServiceImpl implements EmpService {
         return emp;
     }
 
-    public List<EmpData> getAllEmps() {
-        return empDao.getAllEmps();
+    @Transactional
+    public int updateEmp(Integer sal, Integer empId) {
+        int ret = empRepo.updateEmp(sal, empId);
+        log.info("Updated rows " +ret);
+        return ret;
     }
 }

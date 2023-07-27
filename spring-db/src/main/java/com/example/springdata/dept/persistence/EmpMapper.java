@@ -10,10 +10,11 @@ public class EmpMapper implements RowMapper<EmpData> {
 
     @Override
     public EmpData mapRow(ResultSet rs, int rowNum) throws SQLException {
-        EmpData empData = new EmpData();
-        /*empData.setAttributeId(rs.getLong("attributeid"));
-        empData.setAttributeName(rs.getString("attributename"));
-        empData.setAttributeTypeId(rs.getLong("attributetypeid"));*/
+        EmpData empData = EmpData.builder().build();
+        empData.setFirstname(rs.getString(""));
+
+        empData.setLastname(rs.getString("firstName"));
+        //empData.setDeptname(rs.getString("attributename"));
 
         return empData;
     }

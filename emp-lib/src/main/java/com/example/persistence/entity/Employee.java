@@ -49,14 +49,6 @@ public class Employee {
     @JsonIgnore
     private Department dept;*/
 
-    /*public void setDept(Department d){
-        this.dept = d;
-    }
-
-    public Department getDept() {
-        return dept;
-    }*/
-
     @Override
     public boolean equals(Object o) {
         boolean ret = false;

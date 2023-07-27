@@ -34,8 +34,8 @@ public class EmployeeController {
         EmployeeSimple entity = null;
 
         log.info(log.getClass().getName());
-        validate(request);
         try {
+            validate(request);
             entity = empService.saveEmployee(request);
             saveResponse = EmpSimpleSaveResponse.builder().emp(entity).build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.OK);
