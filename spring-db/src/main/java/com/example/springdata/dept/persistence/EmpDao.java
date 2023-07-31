@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface EmpDao {
 
-    public List<EmpData> getAllEmps();
+    public List<EmpData> getAllEmps(String deptName);
 }

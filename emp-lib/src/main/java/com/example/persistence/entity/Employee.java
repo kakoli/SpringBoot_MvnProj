@@ -44,11 +44,6 @@ public class Employee {
     @JoinColumn(name="addr_id", referencedColumnName = "id")
     private Address address;
 
-    /*@ManyToOne
-    @JoinColumn(name="dept_id")
-    @JsonIgnore
-    private Department dept;*/
-
     @Override
     public boolean equals(Object o) {
         boolean ret = false;

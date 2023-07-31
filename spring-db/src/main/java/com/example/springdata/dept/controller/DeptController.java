@@ -5,10 +5,10 @@ import com.example.model.*;
 import com.example.persistence.entity.Department;
 import com.example.springdata.dept.exception.InputValidationException;
 import com.example.springdata.dept.service.DeptService;
-import com.example.springdata.dept.service.EmpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +41,18 @@ public class DeptController {
             saveResponse = DeptSaveResponse.builder().dept(entity).build();
             ret = new ResponseEntity<>(saveResponse, HttpStatus.OK);
         }
-        catch (RuntimeException e) { // Name cannot be blank, Name cannot be duplicate
+        catch (DataIntegrityViolationException e) { // Name cannot be duplicate
+            log.error( " Name duplicate " +e.getCause().toString());
+            //e.printStackTrace();
+            Error err = Error.builder()
+                    .errorCode(HttpStatus.BAD_REQUEST.value())
+                    .errorDesc(e.getCause() != null ? e.getCause().toString() : e.getMessage()).build();
+            saveResponse = DeptSaveResponse.builder()
+                    .errList(Collections.singletonList(err))
+                    .build();
+            ret = new ResponseEntity<>(saveResponse, HttpStatus.BAD_REQUEST);
+        }
+        catch (RuntimeException e) { // Name cannot be blank is validated here
             log.error("Input invalid ");
             e.printStackTrace();
             Error err = Error.builder()
@@ -88,14 +99,16 @@ public class DeptController {
     // Returns Employees with address and department.
     @GetMapping("/{deptName}/emps")
     public ResponseEntity<DeptEmpGetResponse> getAllEmpsFromDept(@PathVariable("deptName") String  deptName) {
-        log.info("Start getAllDeptEmps :");
+        log.info("Start getAllDeptEmps : " +deptName);
         DeptEmpGetResponse getResponse;
         ResponseEntity<DeptEmpGetResponse> ret;
         List<EmpData> empList = null;
 
         if(!StringUtils.isBlank(deptName)) {
             try {
+                long time = System.currentTimeMillis();
                 empList = deptService.getEmpsFromDept(deptName);
+                log.info("Time taken " +(System.currentTimeMillis()-time));
                 getResponse = DeptEmpGetResponse.builder().emps(empList).build();
 
                 //ret = ResponseEntity.ok(empList);

@@ -1,12 +1,12 @@
 package com.example.springdata.dept.controller;
 
-import com.example.model.EmpGetResponse;
-import com.example.model.EmpUpdateRequest;
 import com.example.model.Error;
+import com.example.model.*;
 import com.example.persistence.entity.Employee;
 import com.example.springdata.dept.exception.InputValidationException;
 import com.example.springdata.dept.service.EmpService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 // For simplicity, have clubbed all methods in this controller
@@ -21,10 +22,13 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("/api/v2/emp")
 public class EmpController {
+
     @Autowired
     private EmpService empService;
 
-    // Save an employee with personal details like salary, address etc., but without dept.
+    /* Save an employee with personal details like salary, address etc., but without dept.
+    Will not work if emp.dept_id is not nullable. Can set default value in create table cmd.
+     */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee request) {
         ResponseEntity<Employee> ret = null;
@@ -71,6 +75,25 @@ public class EmpController {
                     .errList(Collections.singletonList(err)).build();
             ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);
         }
+        return ret;
+    }
+
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeptEmpGetResponse> getAllEmps(@RequestParam(value="deptName", required=false) String  deptName) {
+        log.info("Start getAllEmps : " + deptName);
+        DeptEmpGetResponse getResponse;
+        ResponseEntity<DeptEmpGetResponse> ret;
+        List<EmpData> empList = null;
+
+        //if(StringUtils.isBlank(deptName)) { // get emps of all depts
+            long time = System.currentTimeMillis();
+            empList = empService.getAllEmps(deptName);
+            log.info("Time taken " + (System.currentTimeMillis() - time));
+            getResponse = DeptEmpGetResponse.builder().emps(empList).build();
+       // }
+
+        //ret = ResponseEntity.ok(empList);
+        ret = new ResponseEntity<>(getResponse, HttpStatus.OK);
         return ret;
     }
 

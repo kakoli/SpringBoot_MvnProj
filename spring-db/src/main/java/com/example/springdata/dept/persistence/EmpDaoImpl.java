@@ -20,16 +20,15 @@ public class EmpDaoImpl implements EmpDao {
     }
 
     @Override
-    /* AttributeData is the model for the fields of select query which is coming from
-    multiple tables other than 'emp'. Hence this is part of Dao and jdbcTemplate
-    and not EmployeeSimpleRepository, where db operations are built-in or as parameter to
-    @Query annotation.
+    /* EmpData is the model for the fields of select query which is coming from multiple tables other than 'emp'.
+     Since this uses JdbcTemplate, this method is part of Dao and not EmployeeRepository, where db operations
+     are built-in or as parameter to @Query annotation.
     */
-    public  List<EmpData> getAllEmps() {
-        String query = "SELECT e.firstname, e.lastname, e.joindate FROM emp e, address a WHERE \n" +
-                        "e.addr_id = a.id";
-        //List<EmpData> empData = jdbcTemplate.query(query, new EmpMapper());
-        //, new Object[]{loginName, productTypeId});
-        return null;
+    public  List<EmpData> getAllEmps(String deptName) {
+        String query = "SELECT e.firstname, e.lastname, d.name, a.city, a.state, a.zip FROM " +
+                    "emp e, dept d, address a WHERE d.id = e.dept_id and a.id = e.addr_id and d.name = ?";
+        System.out.println("Before jdbcTemplate.query ");
+        List<EmpData> emps = jdbcTemplate.query(query, new EmpMapper(), deptName);
+        return emps;
     }
 }

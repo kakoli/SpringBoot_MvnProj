@@ -1,5 +1,6 @@
 package com.example.springdata.dept.service;
 
+import com.example.model.EmpData;
 import com.example.persistence.entity.Employee;
 import com.example.springdata.dept.persistence.EmpDao;
 import com.example.springdata.dept.persistence.EmpRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -33,6 +35,14 @@ public class EmpServiceImpl implements EmpService {
         Optional<Employee> emp = null;
         emp = empRepo.findById(id);
         return emp;
+    }
+
+    @Override
+    public List<EmpData> getAllEmps(String deptName) {
+        List<EmpData> emps = null;
+        emps = empDao.getAllEmps(deptName);
+        log.info("Got emps " +emps.size());
+        return emps;
     }
 
     @Transactional

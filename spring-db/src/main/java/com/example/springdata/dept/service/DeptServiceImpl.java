@@ -2,14 +2,13 @@ package com.example.springdata.dept.service;
 
 import com.example.model.EmpData;
 import com.example.persistence.entity.Department;
-import com.example.persistence.entity.Employee;
 import com.example.springdata.dept.persistence.DeptRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ public class DeptServiceImpl implements DeptService {
 
 	@Transactional
 	@Override
-	public Department saveDepartment(Department req) {
+	public Department saveDepartment(Department req) throws DataIntegrityViolationException {
 		Department savedEntity = deptRepo.save(req);
 		log.info("Saved dept with id " +savedEntity.getEmps().size());
 		return savedEntity;
