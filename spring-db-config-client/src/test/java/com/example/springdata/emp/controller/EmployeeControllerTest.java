@@ -1,4 +1,4 @@
-package com.example.springdata.emp.controller.emp.controller;
+package com.example.springdata.emp.controller;
 
 import com.example.model.EmpSimpleRequest;
 import com.example.model.BaseResponse;

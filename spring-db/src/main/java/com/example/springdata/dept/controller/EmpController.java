@@ -85,15 +85,18 @@ public class EmpController {
         ResponseEntity<DeptEmpGetResponse> ret;
         List<EmpData> empList = null;
 
-        //if(StringUtils.isBlank(deptName)) { // get emps of all depts
+        if(!StringUtils.isBlank(deptName)) { // get emps of all depts
             long time = System.currentTimeMillis();
             empList = empService.getAllEmps(deptName);
             log.info("Time taken " + (System.currentTimeMillis() - time));
             getResponse = DeptEmpGetResponse.builder().emps(empList).build();
-       // }
-
+            ret = new ResponseEntity<>(getResponse, HttpStatus.OK);
+        }
+        else{
+            getResponse = DeptEmpGetResponse.builder().emps(null).build();
+            ret = new ResponseEntity<>(getResponse, HttpStatus.BAD_REQUEST);
+        }
         //ret = ResponseEntity.ok(empList);
-        ret = new ResponseEntity<>(getResponse, HttpStatus.OK);
         return ret;
     }
 

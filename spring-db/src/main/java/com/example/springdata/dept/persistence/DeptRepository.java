@@ -21,8 +21,7 @@ public interface DeptRepository extends JpaRepository<Department, Integer> {
     Hence, JPQL projections of Constructor reference is used to return non-Entity POJO from this Repo class.
     Also native query like the one below does not work here.
     @Query(value = "SELECT e.firstname, e.lastname, d.name, e.joindate FROM dept d, emp e WHERE \n" +
-            "d.id = e.dept_id and d.name = ?1", nativeQuery = true)
-    */
+            "d.id = e.dept_id and d.name = ?1", nativeQuery = true) */
     @Query("SELECT new com.example.model.EmpData(e.firstname, e.lastname, d.name, a.city, a.state, a.zip) " +
             "FROM Department d JOIN d.emps e JOIN e.address a WHERE d.name = ?1")
     public List<EmpData> getEmpsFromDept(String name);

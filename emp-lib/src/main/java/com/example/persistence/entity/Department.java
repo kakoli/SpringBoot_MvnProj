@@ -32,7 +32,9 @@ public class Department {
     @Column(name="size")
     private Integer size;
 
-    //One To Many Unidirectional mapping
+    /* One To Many Unidirectional mapping
+       If we omit JoinColumn, then there will be 3 tables instead of 2.
+     */
     @OneToMany( cascade = CascadeType.ALL, fetch= FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name="dept_id")
     List<Employee> emps = new ArrayList<>();

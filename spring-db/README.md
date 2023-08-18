@@ -1,5 +1,5 @@
 # SpringData
-* **SpringData JPA** - CRUD db operations via Spring Data JPA. One-One, Many-One relationship
+* **SpringData JPA** - CRUD db operations via Spring Data JPA. One-One, One-Many JPA unidirectional relationship.
 * **Spring JDBC**
 
 **POST APIs** :
